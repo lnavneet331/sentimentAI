@@ -1,18 +1,18 @@
 import streamlit as st
 import pickle
-import sklearn
 from nltk.stem.porter import PorterStemmer
 import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import LabelEncoder
-le = LabelEncoder()
-cv = CountVectorizer(max_features=5000)
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.model_selection import train_test_split
-clf=MultinomialNB()
-from time import sleep
-data=pickle.load(open("dataframe.pkl", "rb"))
+
+data = (pickle.load(open("dataframe.pkl", "rb")))
 features_dict = pickle.load(open("features_dict.pkl", "rb"))
+
+le = LabelEncoder()
+cv = CountVectorizer(max_features=5000)
+clf=MultinomialNB()
 
 def vectorize(dataframe):
     X = cv.fit_transform(dataframe.review).toarray()
@@ -49,6 +49,7 @@ container.write()
 selected_text = container.text_input("Enter the text that you want to test")
 container.write("Processing...")
 
+# selected_text = input("Enter the text that you want to test: ")
 a = stemming(selected_text)
 a = vectorBuild(a)
 X, y = vectorize(data)
@@ -56,5 +57,7 @@ model = modelFunction(X, y, a)
 
 if model[0] == 1:
     container.write("Positive Sentiment")
+    # print("Positive")
 elif model[0] == 0:
     container.write("Negative Sentiment")
+    # print("Negative")
